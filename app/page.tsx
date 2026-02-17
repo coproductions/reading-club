@@ -1,65 +1,95 @@
-import Image from "next/image";
+import { createServerClient } from '@/lib/supabase/server'
+import type { Book } from '@/lib/types'
+import BookCard from '@/components/BookCard'
+import Link from 'next/link'
 
-export default function Home() {
+export const dynamic = 'force-dynamic'
+
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ status?: string }>
+}) {
+  const { status: filterStatus } = await searchParams
+  const supabase = await createServerClient()
+
+  let query = supabase.from('books').select('*')
+  if (filterStatus && filterStatus !== 'all') {
+    query = query.eq('status', filterStatus)
+  }
+
+  const { data: books } = await query.order('updated_at', { ascending: false })
+  const { data: { user } } = await supabase.auth.getUser()
+
+  const filters = [
+    { label: 'All', value: 'all' },
+    { label: 'Reading', value: 'reading' },
+    { label: 'Completed', value: 'completed' },
+    { label: 'Want to Read', value: 'want_to_read' },
+  ]
+
+  const activeFilter = filterStatus || 'all'
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div>
+      <div className="flex items-end justify-between mb-6">
+        <div>
+          <h1 className="text-3xl font-bold">Our Books</h1>
+          <p className="text-stone-500 mt-1">Daddy & Phia&apos;s reading adventures</p>
+        </div>
+        {user && (
+          <Link
+            href="/books/new"
+            className="bg-amber-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-800 transition-colors"
+          >
+            + Add Book
+          </Link>
+        )}
+      </div>
+
+      <div className="flex gap-2 mb-6 overflow-x-auto pb-1">
+        {filters.map((f) => (
+          <Link
+            key={f.value}
+            href={f.value === 'all' ? '/' : `/?status=${f.value}`}
+            className={`px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
+              activeFilter === f.value
+                ? 'bg-amber-700 text-white'
+                : 'bg-white text-stone-600 hover:bg-amber-100'
+            }`}
+          >
+            {f.label}
+          </Link>
+        ))}
+      </div>
+
+      {(!books || books.length === 0) ? (
+        <div className="text-center py-16">
+          <span className="text-5xl block mb-4">&#x1F4DA;</span>
+          <h2 className="text-xl font-heading font-semibold text-stone-700 mb-2">
+            No books yet
+          </h2>
+          <p className="text-stone-500">
+            {user
+              ? 'Start your reading journey by adding your first book!'
+              : 'Check back soon for our reading list!'}
           </p>
+          {user && (
+            <Link
+              href="/books/new"
+              className="inline-block mt-4 bg-amber-700 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-amber-800 transition-colors"
+            >
+              Add Your First Book
+            </Link>
+          )}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          {(books as Book[]).map((book) => (
+            <BookCard key={book.id} book={book} />
+          ))}
         </div>
-      </main>
+      )}
     </div>
-  );
+  )
 }
