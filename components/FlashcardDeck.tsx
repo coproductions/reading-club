@@ -7,6 +7,7 @@ import Flashcard from './Flashcard'
 interface FlashcardDeckProps {
   words: VocabWord[]
   bookTitle: string
+  showBookTitle?: boolean
 }
 
 type Filter = 'all' | 'unlearned'
@@ -20,7 +21,7 @@ function shuffle<T>(arr: T[]): T[] {
   return a
 }
 
-export default function FlashcardDeck({ words, bookTitle }: FlashcardDeckProps) {
+export default function FlashcardDeck({ words, bookTitle, showBookTitle }: FlashcardDeckProps) {
   const [filter, setFilter] = useState<Filter>('all')
   const [shuffled, setShuffled] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -164,6 +165,7 @@ export default function FlashcardDeck({ words, bookTitle }: FlashcardDeckProps) 
           word={currentWord}
           flipped={flipped}
           onFlip={() => setFlipped(!flipped)}
+          showBookTitle={showBookTitle}
         />
       )}
 

@@ -23,6 +23,7 @@ export interface VocabWord {
   example: string | null
   learned: boolean
   created_at: string
+  book_title?: string
 }
 
 export interface FlashcardProgress {
