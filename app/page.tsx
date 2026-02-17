@@ -18,7 +18,9 @@ export default async function HomePage({
     query = query.eq('status', filterStatus)
   }
 
-  const { data: books } = await query.order('updated_at', { ascending: false })
+  const { data: books } = await query
+    .order('start_date', { ascending: false, nullsFirst: false })
+    .order('created_at', { ascending: false })
   const { data: { user } } = await supabase.auth.getUser()
 
   const filters = [
