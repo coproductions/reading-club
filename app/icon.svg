@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="flame" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#b45309"/>
+      <stop offset="50%" style="stop-color:#d97706"/>
+      <stop offset="100%" style="stop-color:#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="wing" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#d97706"/>
+      <stop offset="100%" style="stop-color:#92400e"/>
+    </linearGradient>
+  </defs>
+  <!-- Tail flames -->
+  <path d="M30 85 Q25 60 35 45 Q28 55 32 70 Q30 60 38 50 Q33 62 35 75Z" fill="#f59e0b" opacity="0.7"/>
+  <path d="M38 88 Q35 65 42 48 Q37 58 40 72 Q39 62 45 52 Q41 65 42 78Z" fill="#d97706" opacity="0.8"/>
+  <path d="M22 82 Q20 62 30 48 Q23 56 26 68 Q25 58 32 50 Q27 60 28 72Z" fill="#fbbf24" opacity="0.6"/>
+  <!-- Body -->
+  <ellipse cx="50" cy="52" rx="18" ry="24" fill="url(#flame)" transform="rotate(-5, 50, 52)"/>
+  <!-- Wing left -->
+  <path d="M32 48 Q15 30 8 18 Q18 28 28 35 Q20 22 15 12 Q22 25 32 38Z" fill="url(#wing)"/>
+  <!-- Wing right -->
+  <path d="M68 48 Q85 30 92 18 Q82 28 72 35 Q80 22 85 12 Q78 25 68 38Z" fill="url(#wing)"/>
+  <!-- Head -->
+  <circle cx="50" cy="28" r="12" fill="#d97706"/>
+  <!-- Eye left -->
+  <circle cx="46" cy="26" r="2" fill="#292524"/>
+  <circle cx="46.5" cy="25.5" r="0.7" fill="white"/>
+  <!-- Eye right -->
+  <circle cx="54" cy="26" r="2" fill="#292524"/>
+  <circle cx="54.5" cy="25.5" r="0.7" fill="white"/>
+  <!-- Beak -->
+  <path d="M48 30 L50 35 L52 30Z" fill="#92400e"/>
+  <!-- Crown feathers -->
+  <path d="M44 18 Q42 8 46 4 Q46 12 47 18Z" fill="#f59e0b"/>
+  <path d="M50 17 Q50 5 52 2 Q53 10 52 17Z" fill="#fbbf24"/>
+  <path d="M56 18 Q58 8 54 4 Q54 12 53 18Z" fill="#f59e0b"/>
+</svg>
