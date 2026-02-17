@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import AuthButton from './AuthButton'
+import NavLinks from './NavLinks'
 
 export default function Navbar() {
   return (
@@ -12,14 +13,7 @@ export default function Navbar() {
               Daddy & Phia
             </span>
           </Link>
-          <div className="flex items-center gap-4">
-            <Link href="/" className="text-sm text-stone-500 hover:text-amber-700 transition-colors">
-              Books
-            </Link>
-            <Link href="/vocab" className="text-sm text-stone-500 hover:text-amber-700 transition-colors">
-              Vocab
-            </Link>
-          </div>
+          <NavLinks />
         </div>
         <AuthButton />
       </div>
